@@ -37,6 +37,16 @@ async function retrieve_meal(response: Response, restaurant?: string, date?: str
 	}
 }
 
+// GET /health-check
+// Check health
+app.get(
+	"/health-check",
+	(request: Request, response: Response) => {
+		response.status(200);
+		response.send();
+	}
+);
+
 // GET /
 // Retrieves today's lunch meal at BUK campus
 // (because the author is there)
