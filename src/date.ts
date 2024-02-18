@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import { invalid_argument } from "./errors";
 
 /**
- * Internal function to convert a Date object to YYYYMMDD-formatted string
+ * Internal function to convert a DateTime object to YYYYMMDD-formatted string
  * 
  * @param date The DateTime object
  * @returns Formatted string
@@ -12,7 +12,7 @@ export function date_to_string(date: DateTime<true> | DateTime<false>) {
 }
 
 /**
- * Internal function to convert a YYYYMMDD-formatted string to a Date object
+ * Internal function to convert a YYYYMMDD-formatted string to a DateTime object
  * 
  * @param str Formatted string
  * @returns The DateTime object

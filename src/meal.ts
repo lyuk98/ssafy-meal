@@ -79,7 +79,7 @@ export async function fetch_meal(
 	// Start crafting response
 	let response = "";
 
-	// Recreate Date from date
+	// Recreate DateTime from date
 	{
 		// Add current date and meal type as heading 1
 		const d = string_to_date(request.menuDt);
