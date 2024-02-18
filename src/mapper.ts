@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { date_to_string } from "./date";
+import { date_to_string, string_to_date } from "./date";
 import { invalid_date, invalid_meal, invalid_restaurant } from "./errors";
 
 /**
@@ -123,15 +123,9 @@ export function craft_request(
 		)
 	) throw new invalid_date();
 	// Check for invalid date string (part 2)
+	// Check unusual values such as "20231343"
 	else if(typeof date !== "undefined") {
-		const year = date.substring(0, 4);
-		const month = date.substring(4, 6);
-		const day = date.substring(6);
-		const check_date = new Date(`${year}-${month}-${day}`);
-
-		// Check for invalid date strings, such as "20231343"
-		if(isNaN(check_date.getTime()))
-			throw new invalid_date();
+		string_to_date(date);
 	}
 
 	// Set payload
