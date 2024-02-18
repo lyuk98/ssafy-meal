@@ -94,12 +94,10 @@ export async function fetch_meal(
 	// Loop through meals
 	for(const meal of overview?.data?.mealList) {
 		// Check if this menu is to be included
-		if(
-			!(
-				typeof menus !== "undefined" &&
-				menus.includes(meal.menuCourseType)
-			)
-		) continue;
+		if(Array.isArray(menus)) {
+			if(!menus.includes(meal.menuCourseType))
+				continue;
+		}
 
 		// Add menu and course name
 		response += `\n## ${meal.menuName} (${meal.courseTxt})\n`;
