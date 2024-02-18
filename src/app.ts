@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import { http_error } from "./errors";
 import { fetch_meal } from "./meal";
+import { response_type } from "./mapper";
 
 dotenv.config();
 
@@ -10,16 +11,59 @@ const port = process.env.port || 3000;
 const env = process.env.NODE_ENV || "development";
 
 /**
- * Internal function to do common work of retrieving the meal data
+ * Internal function to do common work of retrieving the meal data in Markdown
+ * format
  * 
  * @param response The response object
  * @param restaurant Restaurant
  * @param date Date
  * @param meal Meal type
  */
-async function retrieve_meal(response: Response, restaurant?: string, date?: string, meal?: string) {
+async function retrieve_meal(
+	response: Response,
+	restaurant?: string,
+	date?: string,
+	meal?: string
+) {
 	try {
 		const data = await fetch_meal(restaurant, date, meal);
+
+		response.contentType("text/markdown");
+		response.send(data);
+	}
+	catch(error: any) {
+		if(error instanceof http_error)
+			response.status(error.response_code());
+		else
+			response.status(500);
+		
+		if(env === "development")
+			response.send(error);
+		else
+			response.send();
+	}
+}
+
+/**
+ * Internal function to do common work of retrieving the meal data in
+ * Mattermost-compatible format
+ * 
+ * @param response The response object
+ * @param restaurant Restaurant
+ * @param date Date
+ * @param meal Meal type
+ */
+async function retrieve_meal_mattermost(
+	response: Response,
+	restaurant?: string,
+	date?: string,
+	meal?: string
+) {
+	try {
+		const data: response_type = {
+			response_type: "in_channel",
+			text: await fetch_meal(restaurant, date, meal)
+		};
 
 		response.contentType("application/json");
 		response.send(data);
@@ -57,6 +101,16 @@ app.get(
 	}
 );
 
+// GET /mattermost
+// Retrieves today's lunch meal at BUK campus
+// in Mattermost-compatible format
+app.get(
+	"/mattermost",
+	(request: Request, response: Response) => {
+		retrieve_meal_mattermost(response);
+	}
+);
+
 // GET /:restaurant
 // Retrieves today's lunch meal at the specified restaurant
 app.get(
@@ -67,6 +121,23 @@ app.get(
 	) => {
 		const parameters = request.params;
 		retrieve_meal(
+			response,
+			parameters.restaurant
+		);
+	}
+);
+
+// GET /:restaurant/mattermost
+// Retrieves today's lunch meal at the specified restaurant
+// in Mattermost-compatible format
+app.get(
+	"/:restaurant/mattermost",
+	(
+		request: Request<{ restaurant: string }>,
+		response: Response
+	) => {
+		const parameters = request.params;
+		retrieve_meal_mattermost(
 			response,
 			parameters.restaurant
 		);
@@ -95,6 +166,29 @@ app.get(
 	}
 );
 
+// GET /:restaurant/:date/mattermost
+// Retrieves a specified day's lunch meal at the specified restaurant
+// in Mattermost-compatible format
+app.get(
+	"/:restaurant/:date/mattermost",
+	(
+		request: Request<
+			{
+				restaurant: string,
+				date: string
+			}
+		>,
+		response: Response
+	) => {
+		const parameters = request.params;
+		retrieve_meal_mattermost(
+			response,
+			parameters.restaurant,
+			parameters.date
+		);
+	}
+);
+
 // GET /:restaurant/:date/:meal
 // Retrieves a specified day's specified meal at the specified restaurant
 app.get(
@@ -111,6 +205,31 @@ app.get(
 	) => {
 		const parameters = request.params;
 		retrieve_meal(
+			response,
+			parameters.restaurant,
+			parameters.date,
+			parameters.meal
+		);
+	}
+);
+
+// GET /:restaurant/:date/:meal
+// Retrieves a specified day's specified meal at the specified restaurant
+// in Mattermost-compatible format
+app.get(
+	"/:restaurant/:date/:meal/mattermost",
+	(
+		request: Request<
+			{
+				restaurant: string,
+				date: string,
+				meal: string
+			}
+		>,
+		response: Response
+	) => {
+		const parameters = request.params;
+		retrieve_meal_mattermost(
 			response,
 			parameters.restaurant,
 			parameters.date,

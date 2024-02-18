@@ -68,7 +68,7 @@ async function fetch_detail(request: detail_request_type) {
  */
 export async function fetch_meal(
 	restaurant?: string, date?: string, meal?: string
-): Promise<response_type> {
+) {
 	// Craft request data and prepare menus to get
 	const request = craft_request(restaurant, date, meal);
 	const menus = get_menus(restaurant);
@@ -133,8 +133,5 @@ export async function fetch_meal(
 		}
 	}
 
-	return {
-		response_type: "in_channel",
-		text: response
-	};
+	return response;
 }
