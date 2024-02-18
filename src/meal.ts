@@ -81,14 +81,9 @@ export async function fetch_meal(
 
 	// Recreate Date from date
 	{
-		const formatter = Intl.DateTimeFormat(
-			"ko-KR",
-			{ "dateStyle": "long" }
-		);
-		const d = string_to_date(request.menuDt);
-
 		// Add current date and meal type as heading 1
-		response += `# ${formatter.format(d)} ${get_meal_string(request.menuMealType)}\n`;
+		const d = string_to_date(request.menuDt);
+		response += `# ${d.toLocaleString({ "dateStyle": "long" })} ${get_meal_string(request.menuMealType)}\n`;
 	}
 
 	// Loop through meals

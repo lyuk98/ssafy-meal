@@ -1,4 +1,5 @@
-import { add_days, date_to_string } from "./date";
+import { DateTime } from "luxon";
+import { date_to_string } from "./date";
 import { invalid_date, invalid_meal, invalid_restaurant } from "./errors";
 
 /**
@@ -89,12 +90,13 @@ export function craft_request(
 	date?: string,
 	meal?: string
 ): request_type {
-	// Today in Date object
-	const today = new Date();
+	// Today in DateTime object
+	const today = DateTime.now().setZone("Asia/Seoul").setLocale("ko-KR");
+
 	// The date when the latest campus opened as minimum
 	const minimum_date = "20210709";
 	// One week after today as maximum
-	const maximum_date = date_to_string(add_days(today, 7));
+	const maximum_date = date_to_string(today.plus({ "days": 7 }).endOf("day"));
 
 	// Default values for undefined parameters
 	const default_restaurant = restaurants["buk"];
