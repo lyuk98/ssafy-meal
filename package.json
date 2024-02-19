@@ -2,7 +2,7 @@
   "name": "meal-retriever",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "dist/app.js",
   "scripts": {
     "dev": "ts-node src/app.ts",
     "build": "tsc",
