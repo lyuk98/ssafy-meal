@@ -78,7 +78,7 @@ export interface request_type {
 };
 
 /**
- * Creates a request to retrieve meal data
+ * Creates a request to fetch meal data
  * 
  * @param restaurant Restaurant name
  * @param date Date in YYYYMMDD format

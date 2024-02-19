@@ -11,7 +11,7 @@ const port = process.env.port || 3000;
 const env = process.env.NODE_ENV || "development";
 
 /**
- * Internal function to do common work of retrieving the meal data in Markdown
+ * Internal function to do common work of getting the meal data in Markdown
  * format
  * 
  * @param response The response object
@@ -19,7 +19,7 @@ const env = process.env.NODE_ENV || "development";
  * @param date Date
  * @param meal Meal type
  */
-async function retrieve_meal(
+async function get_meal(
 	response: Response,
 	restaurant?: string,
 	date?: string,
@@ -45,7 +45,7 @@ async function retrieve_meal(
 }
 
 /**
- * Internal function to do common work of retrieving the meal data in
+ * Internal function to do common work of getting the meal data in
  * Mattermost-compatible format
  * 
  * @param response The response object
@@ -53,7 +53,7 @@ async function retrieve_meal(
  * @param date Date
  * @param meal Meal type
  */
-async function retrieve_meal_mattermost(
+async function get_meal_mattermost(
 	response: Response,
 	restaurant?: string,
 	date?: string,
@@ -97,7 +97,7 @@ app.get(
 app.get(
 	"/",
 	(request: Request, response: Response) => {
-		retrieve_meal(response);
+		get_meal(response);
 	}
 );
 
@@ -107,7 +107,7 @@ app.get(
 app.get(
 	"/mattermost",
 	(request: Request, response: Response) => {
-		retrieve_meal_mattermost(response);
+		get_meal_mattermost(response);
 	}
 );
 
@@ -120,7 +120,7 @@ app.get(
 		response: Response
 	) => {
 		const parameters = request.params;
-		retrieve_meal(
+		get_meal(
 			response,
 			parameters.restaurant
 		);
@@ -137,7 +137,7 @@ app.get(
 		response: Response
 	) => {
 		const parameters = request.params;
-		retrieve_meal_mattermost(
+		get_meal_mattermost(
 			response,
 			parameters.restaurant
 		);
@@ -158,7 +158,7 @@ app.get(
 		response: Response
 	) => {
 		const parameters = request.params;
-		retrieve_meal(
+		get_meal(
 			response,
 			parameters.restaurant,
 			parameters.date
@@ -181,7 +181,7 @@ app.get(
 		response: Response
 	) => {
 		const parameters = request.params;
-		retrieve_meal_mattermost(
+		get_meal_mattermost(
 			response,
 			parameters.restaurant,
 			parameters.date
@@ -204,7 +204,7 @@ app.get(
 		response: Response
 	) => {
 		const parameters = request.params;
-		retrieve_meal(
+		get_meal(
 			response,
 			parameters.restaurant,
 			parameters.date,
@@ -229,7 +229,7 @@ app.get(
 		response: Response
 	) => {
 		const parameters = request.params;
-		retrieve_meal_mattermost(
+		get_meal_mattermost(
 			response,
 			parameters.restaurant,
 			parameters.date,
